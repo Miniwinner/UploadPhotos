@@ -12,9 +12,7 @@ class TableViewCellPost: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.addSubview(imageViewGet)
-        self.addSubview(labelID)
-        self.addSubview(labelName)
+        setupUI()
         configLayout()
         
     }
@@ -61,6 +59,13 @@ class TableViewCellPost: UITableViewCell {
         labelName.text = "Name : \(model.name)"
     }
     
+    func setupUI(){
+        self.addSubview(imageViewGet)
+        self.addSubview(labelID)
+        self.addSubview(labelName)
+        
+    }
+    
     func setupColor(color: UIColor) {
         self.backgroundColor = color
     }
@@ -70,7 +75,7 @@ class TableViewCellPost: UITableViewCell {
             
             imageViewGet.topAnchor.constraint(equalTo: self.topAnchor,constant: 35),
             imageViewGet.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 16),
-            imageViewGet.widthAnchor.constraint(equalToConstant: 200),
+            imageViewGet.widthAnchor.constraint(equalToConstant: 150),
             imageViewGet.heightAnchor.constraint(equalToConstant: 100),
             
             labelID.topAnchor.constraint(equalTo: self.topAnchor,constant: 5),
@@ -80,10 +85,9 @@ class TableViewCellPost: UITableViewCell {
             
             labelName.topAnchor.constraint(equalTo: self.topAnchor,constant: 5),
             labelName.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 20),
-            labelName.widthAnchor.constraint(equalToConstant: 130),
+            labelName.widthAnchor.constraint(equalToConstant: 160),
             labelName.heightAnchor.constraint(equalToConstant: 16),
             
-            self.heightAnchor.constraint(equalToConstant: 150),
         ])
     }
 }

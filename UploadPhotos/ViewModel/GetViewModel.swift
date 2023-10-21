@@ -7,29 +7,49 @@
 
 import Foundation
 
-
 class GetViewModel:ViewModelProtocol{
     
     private let getPhotoService = GetPhotosService()
     private let uploadPhotoService = UploadPhotosService()
     
+    private var isLoading: Bool = false
+    
     var dataModel:[Model] = []
-   
-    private let fio:String = "Александр Кузьминов"
+    var fio:String = "Александр Кузьминов"
+    
+    private var currentPage:Int = 1
+
 
     
-    func fetchData(complition: @escaping (Welcome) -> Void) {
-        getPhotoService.fetchCompany { [weak self] models in
+    func fetchData(completions: @escaping (Welcome) -> Void) {
+        
+        guard !isLoading, currentPage <= 6 else { return }
+           isLoading = true
+        
+        getPhotoService.fetchCompany(page: currentPage) { [weak self] models in
             guard let self = self else { return }
 
-            for content in models.content {
-                let model = Model(id: content.id, name: content.name, image: content.image ?? "0")
-                self.dataModel.append(model)
+            let newModels = models.content.map { content in
+                return Model(id: content.id, name: content.name, image: content.image ?? "0")
             }
 
-            complition(models)
+            if self.currentPage == 0 {
+                self.dataModel = newModels
+            } else {
+                self.dataModel.append(contentsOf: newModels)
+            }
+
+            completions(models)
+
+            self.currentPage += 1
+            self.isLoading = false
         }
     }
+
+    func resetPageNum(){
+        currentPage = 1
+    }
+
 
     func upload(imageData:Data,id:Int){
         uploadPhotoService.sendImageToServer(imageData: imageData, fio: fio, id: id)
