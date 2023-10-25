@@ -12,44 +12,54 @@ class GetViewModel:ViewModelProtocol{
     private let getPhotoService = GetPhotosService()
     private let uploadPhotoService = UploadPhotosService()
     
-    private var isLoading: Bool = false
-    
     var dataModel:[Model] = []
     var fio:String = "Александр Кузьминов"
     
-    private var currentPage:Int = 1
+    private var isLoading: Bool = false
+    private var currentPage: Int = 1
+    private var stopFetching: Bool = false
 
-
-    
-    func fetchData(completions: @escaping (Welcome) -> Void) {
+    func fetchData(completions: @escaping (Welcome?) -> Void) {
+        if isLoading || stopFetching {
+            return
+        }
         
-        guard !isLoading, currentPage <= 6 else { return }
-           isLoading = true
+        isLoading = true
         
         getPhotoService.fetchCompany(page: currentPage) { [weak self] models in
             guard let self = self else { return }
 
-            let newModels = models.content.map { content in
-                return Model(id: content.id, name: content.name, image: content.image ?? "0")
-            }
+            if let models = models {
+                if models.content.isEmpty {
+                    completions(nil)
+                    self.isLoading = false
+                    self.stopFetching = true
+                } else {
+                    let newModels = models.content.map { content in
+                        return Model(id: content.id, name: content.name, image: content.image ?? "0")
+                    }
 
-            if self.currentPage == 0 {
-                self.dataModel = newModels
+                    if self.currentPage == 0 {
+                        self.dataModel = newModels
+                    } else {
+                        self.dataModel.append(contentsOf: newModels)
+                    }
+                    
+                    completions(models)
+                    self.currentPage += 1
+                    self.isLoading = false
+                }
             } else {
-                self.dataModel.append(contentsOf: newModels)
+                completions(nil)
+                self.isLoading = false
+                self.stopFetching = true
             }
-
-            completions(models)
-
-            self.currentPage += 1
-            self.isLoading = false
         }
     }
 
     func resetPageNum(){
         currentPage = 1
     }
-
 
     func upload(imageData:Data,id:Int){
         uploadPhotoService.sendImageToServer(imageData: imageData, fio: fio, id: id)

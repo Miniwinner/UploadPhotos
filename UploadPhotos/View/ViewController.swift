@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         configUI()
         vm.resetPageNum()
         load()
-        picker()
         configLayout()
     }
     
@@ -108,9 +107,10 @@ class ViewController: UIViewController {
     }
     
     func picker(){
-                  imagePicker.delegate = self
-                imagePicker.sourceType = .camera
-                imagePicker.allowsEditing = false
+        imagePicker.delegate = self
+        imagePicker.sourceType = .camera
+        imagePicker.allowsEditing = false
+        present(imagePicker, animated: true, completion: nil)
     }
     
     func load() {
@@ -136,30 +136,47 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
-            //
-            let originalBackgroundColor = cell.contentView.backgroundColor
-            //
-            UIView.animate(withDuration: 0.2, animations: {
-                cell.contentView.backgroundColor = .lightGray
-            }) { _ in
-                UIView.animate(withDuration: 0.2) {
-                    cell.contentView.backgroundColor = originalBackgroundColor
+        
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            tableView.deselectRow(at: indexPath, animated: true)
+            if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
+                
+                let originalBackgroundColor = cell.contentView.backgroundColor
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    cell.contentView.backgroundColor = .lightGray
+                }) { _ in
+                    UIView.animate(withDuration: 0.2) {
+                        cell.contentView.backgroundColor = originalBackgroundColor
+                    }
                 }
             }
-        }
-                selectID = vm.getCats(index: indexPath.section).id
-                let imagePicker = UIImagePickerController()
-                imagePicker.delegate = self
-                imagePicker.sourceType = .camera
-                imagePicker.allowsEditing = false
+                    selectID = vm.getCats(index: indexPath.section).id
+                    picker()
+            
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        present(imagePicker, animated: true, completion: nil)
+                    } else {
+                        print("Ошибка доступа в info.plist")
+                    }
+           } else {
+               if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
+                   
+                   let originalBackgroundColor = cell.contentView.backgroundColor
+                   
+                   UIView.animate(withDuration: 0.2, animations: {
+                       cell.contentView.backgroundColor = .lightGray
+                   }) { _ in
+                       UIView.animate(withDuration: 0.2) {
+                           cell.contentView.backgroundColor = originalBackgroundColor
+                       }
+                   }
+               }
+               print("Камера недоступна")
+           }
         
-                if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    present(imagePicker, animated: true, completion: nil)
-                } else {
-                    print("Ошибка доступа в info.plist")
-                }
+
+       
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -189,6 +206,7 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
         } else {
             cell.setupColor(color: UIColor(red: 0.94, green: 1, blue: 1, alpha: 0))
         }
+        
         
         
         return cell
