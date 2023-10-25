@@ -12,8 +12,8 @@ class GetViewModel:ViewModelProtocol{
     private let getPhotoService = GetPhotosService()
     private let uploadPhotoService = UploadPhotosService()
     
-    var dataModel:[Model] = []
-    var fio:String = "Александр Кузьминов"
+    var dataModel: [Model] = []
+    var fio: String = "Александр Кузьминов"
     
     private var isLoading: Bool = false
     private var currentPage: Int = 1
@@ -72,5 +72,4 @@ class GetViewModel:ViewModelProtocol{
     func getCats(index: Int) -> Model {
         return dataModel[index]
     }
-    
 }

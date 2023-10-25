@@ -7,25 +7,9 @@
 
 import UIKit
 
+import UIKit
+
 class TableViewCellPost: UITableViewCell {
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setupUI()
-        configLayout()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
-    
     lazy var imageViewGet: CustomImageView = {
         let image = CustomImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -53,6 +37,20 @@ class TableViewCellPost: UITableViewCell {
         return label
     }()
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+        configLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
     func config(with model:Model){
         imageViewGet.load(urlString: model.image ?? "23")
         labelID.text = "ID : \(model.id)"
@@ -72,7 +70,6 @@ class TableViewCellPost: UITableViewCell {
         
     func configLayout(){
         NSLayoutConstraint.activate([
-            
             imageViewGet.topAnchor.constraint(equalTo: self.topAnchor,constant: 35),
             imageViewGet.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 16),
             imageViewGet.widthAnchor.constraint(equalToConstant: 150),

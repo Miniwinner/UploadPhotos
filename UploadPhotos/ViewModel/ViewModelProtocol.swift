@@ -10,6 +10,7 @@ import Foundation
 protocol ViewModelProtocol{
     
     var dataModel: [Model] { get set }
+    
     var fio:String { get set }
     
     func fetchData(completions: @escaping (Welcome?) -> Void)
