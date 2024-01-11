@@ -137,11 +137,13 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
         }
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastRowIndex = tableView.numberOfRows(inSection: indexPath.section) - 1
-        if indexPath.row == lastRowIndex && !viewModel.isLoading && viewModel.hasMoreData {
+        let lastElementIndex = viewModel.dataModel.count - 1
+        let preloadIndex = max(lastElementIndex - 5, 0)
+        if indexPath.section >= preloadIndex && !viewModel.isLoading && viewModel.hasMoreData {
             loadData()
         }
     }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }

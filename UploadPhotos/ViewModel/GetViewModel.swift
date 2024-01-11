@@ -14,6 +14,7 @@ final class GetViewModel:ViewModelProtocol{
     
     var isLoading = false
     var hasMoreData = true
+    private var itemsPerPage = 0
     private var currentPage = 1
     var dataModel = [Model]()
     
@@ -30,6 +31,7 @@ final class GetViewModel:ViewModelProtocol{
                     completion(.failure(URLError(.dataNotAllowed)))
                     return
                 }
+                self.itemsPerPage = welcome.content.count
                 let newModels = welcome.content.map { Model(id: $0.id, name: $0.name, image: $0.image ?? "0") }
                 self.dataModel.append(contentsOf: newModels)
                 completion(.success(self.dataModel))
@@ -39,6 +41,9 @@ final class GetViewModel:ViewModelProtocol{
                 completion(.failure(error))
             }
         }
+    }
+    func countOFitems() -> Int {
+        return itemsPerPage
     }
     func resetPageNum(){
         currentPage = 1
