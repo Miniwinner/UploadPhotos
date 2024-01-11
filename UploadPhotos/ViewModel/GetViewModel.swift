@@ -8,42 +8,41 @@
 import Foundation
 
 final class GetViewModel:ViewModelProtocol{
+  
+    
     private let getPhotoService = GetPhotosService()
     private let uploadPhotoService = UploadPhotosService()
-    var dataModel: [Model] = []
     var fio: String = "Александр Кузьминов"
-    private var isLoading: Bool = false
-    private var currentPage: Int = 1
-    private var stopFetching: Bool = false
-    func fetchData(completions: @escaping (Welcome?) -> Void) {
-        if isLoading || stopFetching {
-            return
-        }
+    private var isLoading = false
+    private var currentPage = 1
+    private var stopFetching = false
+    var dataModel = [Model]()
+
+    func fetchData(completion: @escaping (Result<[Model], Error>) -> Void) {
+        guard !isLoading && !stopFetching else { return }
         isLoading = true
-        getPhotoService.fetchCompany(page: currentPage) { [weak self] models in
+        getPhotoService.fetchPhotos(page: currentPage) { [weak self] result in
             guard let self = self else { return }
-            if let models = models {
-                if models.content.isEmpty {
-                    completions(nil)
-                    self.isLoading = false
+            defer { self.isLoading = false }
+            switch result {
+            case .success(let welcome):
+                guard !welcome.content.isEmpty else {
                     self.stopFetching = true
-                } else {
-                    let newModels = models.content.map { content in
-                        return Model(id: content.id, name: content.name, image: content.image ?? "0")
-                    }
-                    if self.currentPage == 0 {
-                        self.dataModel = newModels
-                    } else {
-                        self.dataModel.append(contentsOf: newModels)
-                    }
-                    completions(models)
-                    self.currentPage += 1
-                    self.isLoading = false
+                    completion(.failure(URLError(.dataNotAllowed)))
+                    return
                 }
-            } else {
-                completions(nil)
-                self.isLoading = false
+                let newModels = welcome.content.map { Model(id: $0.id, name: $0.name, image: $0.image ?? "0") }
+                if self.currentPage == 1 {
+                    self.dataModel = newModels
+                } else {
+                    self.dataModel.append(contentsOf: newModels)
+                }
+                completion(.success(self.dataModel))
+                self.currentPage += 1
+
+            case .failure(let error):
                 self.stopFetching = true
+                completion(.failure(error))
             }
         }
     }

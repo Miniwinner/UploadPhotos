@@ -8,23 +8,39 @@
 import Foundation
 
 
-class GetPhotosService{
-    func fetchCompany(page:Int,complitions: @escaping (Welcome?) -> Void) {
-        guard let urlCompany = URL(string: "https://junior.balinasoft.com/api/v2/photo/type?page=\(page)") else { return }
-        let requestCompany = URLRequest(url: urlCompany)
-        URLSession.shared.dataTask(with: requestCompany) { data, respone, error in
-            guard let data = data else {
-                print(error?.localizedDescription as Any)
+class GetPhotosService {
+    // MARK: - Public Methods
+    public func fetchPhotos(page: Int, completion: @escaping (Result<Welcome, Error>) -> Void) {
+        guard let url = URL(string: "https://junior.balinasoft.com/api/v2/photo/type?page=\(page)") else {
+            completion(.failure(URLError(.badURL)))
+            return
+        }
+        let request = URLRequest(url: url)
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
                 return
             }
-            guard let company = self.parseJson(type: Welcome.self, data: data) else { return }
-            complitions(company)
-            print(company)
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(URLError(.dataNotAllowed)))
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                self?.decodeJSON(data: data, completion: completion)
+            }
         }.resume()
     }
-    func parseJson<T: Codable>(type: T.Type, data: Data) -> T? {
+    private func decodeJSON<T: Codable>(data: Data, completion: @escaping (Result<T, Error>) -> Void) {
         let decoder = JSONDecoder()
-        let model = try? decoder.decode(T.self, from: data)
-        return model
+        do {
+            let model = try decoder.decode(T.self, from: data)
+            completion(.success(model))
+        } catch {
+            completion(.failure(error))
+        }
     }
 }

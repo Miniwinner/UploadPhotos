@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		41523F0E2ADFC9AA001613FB /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41523F0D2ADFC9AA001613FB /* UserDefaultsExtension.swift */; };
 		41D949FD2AC0263D0031265D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D949FC2AC0263D0031265D /* AppDelegate.swift */; };
 		41D949FF2AC0263D0031265D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D949FE2AC0263D0031265D /* SceneDelegate.swift */; };
 		41D94A012AC0263D0031265D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D94A002AC0263D0031265D /* ViewController.swift */; };
@@ -24,7 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		41523F0D2ADFC9AA001613FB /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 		41D949F92AC0263D0031265D /* UploadPhotos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UploadPhotos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41D949FC2AC0263D0031265D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		41D949FE2AC0263D0031265D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,14 +51,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		41523F0C2ADFC985001613FB /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				41523F0D2ADFC9AA001613FB /* UserDefaultsExtension.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 		41D949F02AC0263D0031265D = {
 			isa = PBXGroup;
 			children = (
@@ -114,7 +104,6 @@
 				41D94A122AC02B020031265D /* GetPhotosService.swift */,
 				41E6A4112AC08B960083295B /* UploadPhotosService.swift */,
 				41D94A1A2AC031880031265D /* ImageCache.swift */,
-				41523F0C2ADFC985001613FB /* Extension */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -227,7 +216,6 @@
 				41E6A4142AC09FC20083295B /* ViewModelProtocol.swift in Sources */,
 				41D94A152AC02C7B0031265D /* GetModel.swift in Sources */,
 				41D94A132AC02B020031265D /* GetPhotosService.swift in Sources */,
-				41523F0E2ADFC9AA001613FB /* UserDefaultsExtension.swift in Sources */,
 				41D94A192AC02D7F0031265D /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

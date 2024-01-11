@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = .clear
         image.contentMode = .scaleAspectFill
-        image.image = UIImage(named: "back")
+        image.image = UIImage(named: "background")
         return image
     }()
     private var refreshControl = UIRefreshControl()
@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     }
     //MARK: - UI SETUP LAYOUT
     func configUI(){
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         tableViewItems.delegate = self
         tableViewItems.dataSource = self
         tableViewItems.register(TableViewCellPost.self, forCellReuseIdentifier: "table")
