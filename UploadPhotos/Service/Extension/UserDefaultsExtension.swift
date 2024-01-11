@@ -13,7 +13,6 @@ import Foundation
 struct Persist<T> {
     let key: String
     let defaultValue: T
-
     init(key: String, defaultValue: T) {
         self.key = key
         self.defaultValue = defaultValue
@@ -22,7 +21,6 @@ struct Persist<T> {
             wrappedValue = defaultValue
         }
     }
-
     var wrappedValue: T {
         get {
             if let val = UserDefaults.standard.object(forKey: key) as? T {
@@ -32,16 +30,13 @@ struct Persist<T> {
                 return defaultValue
             }
         }
-
         set {
             UserDefaults.standard.set(newValue, forKey: key)
         }
     }
 }
-
 extension UserDefaults {
     @Persist(key: "defaultStock", defaultValue: [0,1,2,3,4,5])
-    
     static var pages: [Int]
     
 }

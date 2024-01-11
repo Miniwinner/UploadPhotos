@@ -8,13 +8,12 @@
 import Foundation
 
 struct Welcome: Codable {
-    let totalPages:Int
+    let totalPages: Int
     let totalElements: Int
     let content: [Content]
-    let page:Int
-    let pageSize:Int
+    let page: Int
+    let pageSize: Int
 }
-
 struct Content: Codable {
     let id: Int
     let name: String
