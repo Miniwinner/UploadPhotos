@@ -3,4 +3,84 @@
    uuid = "D9A7F86B-BA9A-4230-AB28-BBE0E52F9FD4"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7B5289CF-1BAA-4F2D-AB0F-B069761F38A3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UploadPhotos/Service/GetPhotosService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "11"
+            endingLineNumber = "11"
+            landmarkName = "GetPhotosService"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "7B5289CF-1BAA-4F2D-AB0F-B069761F38A3 - 79a18d4ab8ec41fa"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UploadPhotos.GetPhotosService.deinit"
+                  moduleName = "UploadPhotos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Miniwinner/Documents/UploadPhotos/UploadPhotos/Service/GetPhotosService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "11"
+                  endingLineNumber = "11"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "7B5289CF-1BAA-4F2D-AB0F-B069761F38A3 - 2bfbb27fbb82ad10"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UploadPhotos.GetPhotosService.__deallocating_deinit"
+                  moduleName = "UploadPhotos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Miniwinner/Documents/UploadPhotos/UploadPhotos/Service/GetPhotosService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "7B5289CF-1BAA-4F2D-AB0F-B069761F38A3 - 5f8cd734a71c1117"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UploadPhotos.GetPhotosService.__allocating_init() -&gt; UploadPhotos.GetPhotosService"
+                  moduleName = "UploadPhotos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Miniwinner/Documents/UploadPhotos/UploadPhotos/Service/GetPhotosService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "7B5289CF-1BAA-4F2D-AB0F-B069761F38A3 - d34d9f3fe183c018"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UploadPhotos.GetPhotosService.init() -&gt; UploadPhotos.GetPhotosService"
+                  moduleName = "UploadPhotos"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Miniwinner/Documents/UploadPhotos/UploadPhotos/Service/GetPhotosService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "11"
+                  endingLineNumber = "11"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

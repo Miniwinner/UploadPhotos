@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     var isImagePickerPresented = false
-    private let vm = GetViewModel()
+    private let viewModel = GetViewModel()
     private let imagePicker = UIImagePickerController()
     private var selectID:Int?
     
@@ -32,9 +32,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
-        vm.resetPageNum()
-        load()
         configLayout()
+        viewModel.resetPageNum()
+        loadData()
     }
     //MARK: - UI SETUP LAYOUT
     func configUI(){
@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         )
     }
     @objc func refreshTable(_ sender: Any) {
-        vm.fetchData { [weak self] data in
+        viewModel.fetchData { [weak self] data in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.tableViewItems.reloadData()
@@ -91,74 +91,66 @@ class ViewController: UIViewController {
         imagePicker.allowsEditing = false
         present(imagePicker, animated: true, completion: nil)
     }
-    func load() {
-        vm.fetchData { [weak self] data in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.tableViewItems.reloadData()
+    func loadData() {
+           viewModel.fetchData { [weak self] result in
+               DispatchQueue.main.async {
+                   switch result {
+                   case .success(_):
+                       self?.tableViewItems.reloadData()
+                   case .failure(let error):
+                       print("Error: \(error.localizedDescription)")
+                   }
+               }
+           }
+       }
+    private func highlightCell(_ cell: TableViewCellPost) {
+        let originalBackgroundColor = cell.contentView.backgroundColor
+        UIView.animate(withDuration: 0.4, animations: {
+            cell.contentView.backgroundColor = .lightGray
+        }) { _ in
+            UIView.animate(withDuration: 0.4) {
+                cell.contentView.backgroundColor = originalBackgroundColor
             }
         }
     }
+    private func showAlert(with message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
 }
-
 //MARK: TABLE VIEW
-
 extension ViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
+            highlightCell(cell)
+        }
+        selectID = viewModel.getCats(index: indexPath.section).id
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            tableView.deselectRow(at: indexPath, animated: true)
-            if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
-                let originalBackgroundColor = cell.contentView.backgroundColor
-                UIView.animate(withDuration: 0.2, animations: {
-                    cell.contentView.backgroundColor = .lightGray
-                }) { _ in
-                    UIView.animate(withDuration: 0.2) {
-                        cell.contentView.backgroundColor = originalBackgroundColor
-                    }
-                }
-            }
-            selectID = vm.getCats(index: indexPath.section).id
-            
-            if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                picker()
-            } else {
-                print("Ошибка доступа в info.plist")
-            }
+            picker()
         } else {
-            if let cell = tableView.cellForRow(at: indexPath) as? TableViewCellPost {
-                
-                let originalBackgroundColor = cell.contentView.backgroundColor
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    cell.contentView.backgroundColor = .lightGray
-                }) { _ in
-                    UIView.animate(withDuration: 0.2) {
-                        cell.contentView.backgroundColor = originalBackgroundColor
-                    }
-                }
-            }
-            print("Камера недоступна")
+            showAlert(with: "Camera is not available.")
         }
     }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastRowIndex = tableView.numberOfRows(inSection: 0) - 1
-        if indexPath.row == lastRowIndex {
-            load()
+        let lastRowIndex = tableView.numberOfRows(inSection: indexPath.section) - 1
+        if indexPath.row == lastRowIndex && !viewModel.isLoading && viewModel.hasMoreData {
+            loadData()
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return vm.numberOfRows()
+        return viewModel.numberOfRows()
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableViewItems.dequeueReusableCell(withIdentifier: "table") as! TableViewCellPost
-        cell.config(with: vm.getCats(index: indexPath.section))
+        cell.config(with: viewModel.getCats(index: indexPath.section))
         if indexPath.section % 2 == 0 {
             cell.setupColor(color: UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 0))
         } else {
@@ -167,7 +159,7 @@ extension ViewController:UITableViewDelegate,UITableViewDataSource{
         return cell
     }
 }
-//MARK: PICKER
+//MARK: - PICKER
 extension ViewController:UIPickerViewDelegate,UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
@@ -178,7 +170,7 @@ extension ViewController:UIPickerViewDelegate,UIPickerViewDataSource{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage {
             if let imageData = image.jpegData(compressionQuality: 0.8) {
-                vm.upload(imageData: imageData, id: selectID ?? 0)
+                viewModel.upload(imageData: imageData, id: selectID ?? 0)
             }
         }
         picker.dismiss(animated: true, completion: nil)
